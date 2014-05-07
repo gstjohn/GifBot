@@ -1,5 +1,10 @@
 <?php
 
+// This is the Giphy API key for public beta access
+// It will work up to a certain rate limit.
+// See: https://github.com/giphy/GiphyAPI#access-and-api-keys
+define('GIPHY_API_KEY', 'dc6zaTOxFJmzC');
+
 // Get request
 $trigger = $_POST['trigger_word'];
 $search  = trim(substr($_POST['text'], strlen($trigger) + 1));
@@ -11,7 +16,7 @@ if ($search == '') {
 
 // Query Giphy - http://giphy.com/
 $limit    = 25;
-$response = file_get_contents('http://api.giphy.com/v1/gifs/search?q=' . urlencode($search) . '&api_key=dc6zaTOxFJmzC&limit=' . $limit . '&offset=0');
+$response = file_get_contents('http://api.giphy.com/v1/gifs/search?q=' . urlencode($search) . '&api_key=' . GIPHY_API_KEY . '&limit=' . $limit . '&offset=0');
 $response = json_decode($response);
 
 // Pick a random GIF
