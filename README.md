@@ -3,7 +3,7 @@ GifBot
 
 <img src="http://hellobold.com/slack/gifbot-logo.gif?new" />
 
-Bump your Slack channels to 11! GifBot is a Slack webhook that inserts random GIF's into to any Slack channel. Yes yes, we know you already have GIF's, GifBot just makes it faster, stronger, giffier.
+Bump your Slack channels to 11! GifBot is a Slack webhook that inserts random GIF's into any Slack channel. Yes yes, we know you already have GIFs, GifBot just makes it faster, stronger, giffier.
 
 ## Installation
 
