@@ -3,7 +3,7 @@
 // This is the Giphy API key for public beta access
 // It will work up to a certain rate limit.
 // See: https://github.com/giphy/GiphyAPI#access-and-api-keys
-define('GIPHY_API_KEY', 'dc6zaTOxFJmzC');
+define('GIPHY_API_KEY', 'your_api_key');
 
 // Get request
 $trigger = $_POST['trigger_word'];
