@@ -18,14 +18,9 @@ if ($search == '') {
     exit;
 }
 
-// Query Giphy - http://giphy.com/
-$limit    = 25;
-$response = file_get_contents('http://api.giphy.com/v1/gifs/search?q=' .
-    urlencode($search) . '&api_key=' . GIPHY_API_KEY . '&limit=' . $limit . '&offset=0');
-$response = json_decode($response);
 
 // Pick a random GIF
-$gifs  = $response->data;
+$gifs  = getGif($search);
 $count = count($gifs);
 
 // Make sure we have an image
@@ -44,4 +39,18 @@ echo json_encode(array(
 
 exit;
 
-function
+/**
+ * Get a GIF
+ *
+ * @param $search
+ */
+function getGif($search)
+{
+    // Query Giphy - http://giphy.com/
+    $limit    = 25;
+    $response = file_get_contents('http://api.giphy.com/v1/gifs/search?q=' .
+        urlencode($search) . '&api_key=' . GIPHY_API_KEY . '&limit=' . $limit . '&offset=0');
+    $response = json_decode($response);
+
+    return $response->data;
+}
