@@ -3,6 +3,7 @@
 // This is the Giphy API key for public beta access
 // It will work up to a certain rate limit.
 // See: https://github.com/giphy/GiphyAPI#access-and-api-keys
+define('GIPHY_RESULT_LIMIT', 25);
 define('GIPHY_API_KEY', 'dc6zaTOxFJmzC');
 
 // Get request
@@ -25,7 +26,7 @@ $count = count($gifs);
 
 // Make sure we have an image
 if ($count) {
-    $image    = $gifs[rand(0, $count - 1)]->images->fixed_width_downsampled;
+    $image    = $gifs[rand(0, $count - 1)]->images->original;
     $response = $image->url;
 } else {
     $response = 'No image found for `' . $search . '`';
@@ -47,9 +48,7 @@ exit;
 function getGif($search)
 {
     // Query Giphy - http://giphy.com/
-    $limit    = 25;
-    $response = file_get_contents('http://api.giphy.com/v1/gifs/search?q=' .
-        urlencode($search) . '&api_key=' . GIPHY_API_KEY . '&limit=' . $limit . '&offset=0');
+    $response = file_get_contents('http://api.giphy.com/v1/gifs/search?q=' . urlencode($search) . '&api_key=' . urlencode(GIPHY_API_KEY) . '&limit=' . urlencode(GIPHY_RESULT_LIMIT) . '&offset=0');
     $response = json_decode($response);
 
     return $response->data;
