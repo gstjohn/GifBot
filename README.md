@@ -25,6 +25,8 @@ Fill out the webhook settings.
 
 You may customize any of the settings to fit what you like best as long and the URL is correctly pointing to the GifBot.php file.
 
-Now, go back to your Slack chats type #gif search_term and prosper.
+## Usage
+
+Go back to your Slack chats and type "#gif <search_term>" and prosper. Or, just type "#gif" and get yourself a random boost of wonderful.
 
 <img src="http://hellobold.com/slack/gifbot-demo.jpg" />
