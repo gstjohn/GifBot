@@ -7,37 +7,27 @@ define('GIPHY_API_KEY', 'dc6zaTOxFJmzC');
 
 // Get request
 $trigger = $_POST['trigger_word'];
-$text = $_POST['text'];
-
-// build search string
-$search  = trim(substr($text, strlen($trigger) + 1));
-
-// fail if search string is empty
-if ($search == '') {
-    echo 'OK';
-    exit;
-}
+$search  = trim(substr($_POST['text'], strlen($trigger) + 1));
 
 // Query Giphy - http://giphy.com/
 $limit    = 25;
-$response = file_get_contents('http://api.giphy.com/v1/gifs/search?q=' .
-            urlencode($search) . '&api_key=' . GIPHY_API_KEY . '&limit=' . $limit . '&offset=0');
-$response = json_decode($response);
+$response = json_decode(file_get_contents('http://api.giphy.com/v1/gifs/search?q=' . urlencode($search) . '&api_key=' . GIPHY_API_KEY . '&limit=' . $limit . '&offset=0'));
 
 // Pick a random GIF
 $gifs  = $response->data;
 $count = count($gifs);
+$image = $gifs[rand(0, $count - 1)]->images->original;
 
-// make sure we have an image
-if ($count) {
-    $image = $gifs[rand(0, $count - 1)]->images->original;
-    $response = $image->url;
+if($image) {
+	$image_url = $image->url;
 } else {
-    $response = 'No image found for `' . $search . '`';
+	$response = json_decode(file_get_contents('http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&limit=2'));
+	// Pick a random GIF
+	$image_url = 'I\'m very sorry - I was unable to find a gif with the search term _"' . $search . '"_. Instead, have a random one: ' . $response->data->image_url;
 }
 
-// Respond
+// Respond with GIF
 header('Content-Type: application/json');
 echo json_encode(array(
-    'text' => $response
+	'text' => $image_url
 ));
