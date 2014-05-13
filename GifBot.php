@@ -13,15 +13,13 @@ $text    = $_POST['text'];
 // Build search string
 $search = trim(substr($text, strlen($trigger) + 1));
 
-// Fail if search string is empty
+// Response with random GIF if no search is provided
 if ($search == '') {
-    echo 'OK';
-    exit;
+    sendResponse(randomGif());
 }
 
-
-// Pick a random GIF
-$gifs  = getGif($search);
+// Pick a random GIF from result set
+$gifs  = searchGifs($search);
 $count = count($gifs);
 
 // Make sure we have an image
@@ -29,27 +27,72 @@ if ($count) {
     $image    = $gifs[rand(0, $count - 1)]->images->original;
     $response = $image->url;
 } else {
-    $response = 'No image found for `' . $search . '`';
+    $response = 'No image found for `' . $search . '`. Enjoy this random GIF instead. ' . randomGif();
 }
 
 // Respond
-header('Content-Type: application/json');
-echo json_encode(array(
-    'text' => $response
-));
+sendResponse($response);
 
 exit;
 
 /**
- * Get a GIF
+ * Get a GIF by search
  *
  * @param $search
  */
-function getGif($search)
+function searchGifs($search)
 {
-    // Query Giphy - http://giphy.com/
-    $response = file_get_contents('http://api.giphy.com/v1/gifs/search?q=' . urlencode($search) . '&api_key=' . urlencode(GIPHY_API_KEY) . '&limit=' . urlencode(GIPHY_RESULT_LIMIT) . '&offset=0');
-    $response = json_decode($response);
+    $url      = 'http://api.giphy.com/v1/gifs/search?q=' . urlencode($search) . '&api_key=' . urlencode(GIPHY_API_KEY) . '&limit=' . urlencode(GIPHY_RESULT_LIMIT) . '&offset=0';
+    $response = makeRequest($url);
 
     return $response->data;
+}
+
+/**
+ * Get a random GIF
+ *
+ * @return
+ */
+function randomGif()
+{
+    $url      = 'http://api.giphy.com/v1/gifs/random?api_key=' . urlencode(GIPHY_API_KEY);
+    $response = makeRequest($url);
+
+    return $response->data->image_url;
+}
+
+/**
+ * Make Giphy API request
+ *
+ * @param $url
+ * @return string
+ */
+function makeRequest($url)
+{
+    $response = array();
+
+    if (ini_get('allow_url_fopen')) {
+        $response = file_get_contents($url);
+    } elseif (function_exists('curl_version')) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($ch);
+        curl_close($ch);
+    }
+
+    return json_decode($response);
+}
+
+/**
+ * Send JSON Response
+ *
+ * @param $response
+ */
+function sendResponse($response)
+{
+    header('Content-Type: application/json');
+    die(json_encode(array(
+        'text' => $response
+    )));
 }
