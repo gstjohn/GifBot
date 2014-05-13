@@ -27,6 +27,6 @@ You may customize any of the settings to fit what you like best as long and the 
 
 ## Usage
 
-Go back to your Slack chats and type "#gif <search_term>" and prosper. Or, just type "#gif" and get yourself a random boost of wonderful.
+Go back to your Slack chats and type "#gif &lt;search_term&gt;" and prosper. Or, just type "#gif" and get yourself a random boost of wonderful.
 
 <img src="http://hellobold.com/slack/gifbot-demo.jpg" />
