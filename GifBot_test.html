@@ -26,14 +26,14 @@
         You might want to delete this page when you're done.
     </p>
 
-    <form action="GifBot.php" method="get">
+    <form action="GifBot.php" method="post">
         <h3>Single Result</h3>
         <input type="hidden" name="trigger_word" value="gif" />
         Search phrase: <input type="text" name="text" placeholder="gif <search term>" />
         <input type="submit" />
     </form>
 
-    <form action="GifBot.php" method="get">
+    <form action="GifBot.php" method="post">
         <h3>Multiple Results</h3>
         <input type="hidden" name="trigger_word" value="gifbomb" />
         Search phrase: <input type="text" name="text" placeholder="gifbomb <number> <search term>" />
@@ -55,12 +55,16 @@
                     trigger_word = $form.find('[name="trigger_word"]').val(),
                     url = $(this).attr('action');
 
-                $.get(url, { text: text, trigger_word: trigger_word })
+                $.post(url, { text: text, trigger_word: trigger_word })
                     .success(function(data){
                         var $resultContainer = $('#results'),
+                            arr,
                             result;
                         if (data.text.indexOf('http') >= 0) {
-                            result = '<img src="' + data.text + '" />';
+                            arr = data.text.split(' ');
+                            arr.forEach(function(img){
+                                result += '<img src="' + img + '" />';
+                            })
                         } else {
                             result = data.text;
                         }

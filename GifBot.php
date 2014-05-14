@@ -12,8 +12,8 @@ $limit = 25;
 $num = 1;
 
 // Get request
-$trigger = $_GET['trigger_word']; // currently gif or gifbomb
-$text = $_GET['text'];
+$trigger = $_POST['trigger_word']; // currently gif or gifbomb
+$text = $_POST['text'];
 
 // multiple images, or just a one-off?
 if ($trigger == 'gifbomb') {
@@ -50,7 +50,7 @@ if ($count) {
     // else it returns an array if `$num` is greater than 1
     if (is_array($keys)) {
         // loop over the random keys, append image data to `$response_data`
-        for ($i=0; $i<=count($keys); $i++) {
+        for ($i=1; $i<=count($keys); $i++) {
             $response_data[] = $gifs[$i]->images->original->url;
         }
     } else {
