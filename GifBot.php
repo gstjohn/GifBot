@@ -5,12 +5,32 @@
 // See: https://github.com/giphy/GiphyAPI#access-and-api-keys
 define('GIPHY_API_KEY', 'dc6zaTOxFJmzC');
 
-// Get request
-$trigger = $_POST['trigger_word'];
-$text = $_POST['text'];
+// maximum number to retrieve,
+// can be overridden by gifbomb count
+$limit = 25;
+$count = 0;
 
-// build search string
-$search  = trim(substr($text, strlen($trigger) + 1));
+// Get request
+$trigger = $_GET['trigger_word']; // gif or gifbomb
+$text = $_GET['text'];
+
+// single use, or return multiples?
+if ($trigger == 'gif') {
+    $regex = '/^' . $trigger . ' (.+)$/';
+    $results = preg_match($regex, $text, $matches);
+    $search = $matches[1];
+} else if ($trigger == 'gifbomb') {
+    $regex = '/^' . $trigger . ' (\d+) (.+)$/';
+    $results = preg_match($regex, $text, $matches);
+    $count = $matches[1];
+    $search = $matches[2];
+}
+
+
+echo $search . '<br /><br />';
+echo $count . '<br /><br />';
+// print_r($matches);
+
 
 // fail if search string is empty
 if ($search == '') {
@@ -19,7 +39,6 @@ if ($search == '') {
 }
 
 // Query Giphy - http://giphy.com/
-$limit    = 25;
 $response = file_get_contents('http://api.giphy.com/v1/gifs/search?q=' .
             urlencode($search) . '&api_key=' . GIPHY_API_KEY . '&limit=' . $limit . '&offset=0');
 $response = json_decode($response);
@@ -41,3 +60,5 @@ header('Content-Type: application/json');
 echo json_encode(array(
     'text' => $response
 ));
+
+?>

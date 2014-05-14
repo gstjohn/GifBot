@@ -4,6 +4,7 @@
     <style>
         * { font-family: "Trebuchet MS", verdana, arial, sans-serif; }
         input { font-size: 1.2em; }
+        input[type=text] { width: 300px; }
         #results {
             border: 2px dashed #bbbbbb;
             color: #bbbbbb;
@@ -25,9 +26,17 @@
         You might want to delete this page when you're done.
     </p>
 
-    <form action="GifBot.php" method="POST">
+    <form action="GifBot.php" method="get">
+        <h3>Single Result</h3>
         <input type="hidden" name="trigger_word" value="gif" />
         Search phrase: <input type="text" name="text" placeholder="gif <search term>" />
+        <input type="submit" />
+    </form>
+
+    <form action="GifBot.php" method="get">
+        <h3>Multiple Results</h3>
+        <input type="hidden" name="trigger_word" value="gifbomb" />
+        Search phrase: <input type="text" name="text" placeholder="gifbomb <number> <search term>" />
         <input type="submit" />
     </form>
 
@@ -46,7 +55,7 @@
                     trigger_word = $form.find('[name="trigger_word"]').val(),
                     url = $(this).attr('action');
 
-                $.post(url, { text: text, trigger_word: trigger_word })
+                $.get(url, { text: text, trigger_word: trigger_word })
                     .success(function(data){
                         var $resultContainer = $('#results'),
                             result;
