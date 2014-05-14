@@ -5,32 +5,27 @@
 // See: https://github.com/giphy/GiphyAPI#access-and-api-keys
 define('GIPHY_API_KEY', 'dc6zaTOxFJmzC');
 
-// maximum number to retrieve,
-// can be overridden by gifbomb count
+// maximum number to retrieve
 $limit = 25;
-$count = 0;
+// the number of images to return
+// can be overridden by gifbomb count
+$num = 1;
 
 // Get request
-$trigger = $_GET['trigger_word']; // gif or gifbomb
+$trigger = $_GET['trigger_word']; // currently gif or gifbomb
 $text = $_GET['text'];
 
-// single use, or return multiples?
-if ($trigger == 'gif') {
+// multiple images, or just a one-off?
+if ($trigger == 'gifbomb') {
+    $regex = '/^' . $trigger . ' (\d+) (.+)$/';
+    $results = preg_match($regex, $text, $matches);
+    $num = $matches[1];
+    $search = $matches[2];
+} else {
     $regex = '/^' . $trigger . ' (.+)$/';
     $results = preg_match($regex, $text, $matches);
     $search = $matches[1];
-} else if ($trigger == 'gifbomb') {
-    $regex = '/^' . $trigger . ' (\d+) (.+)$/';
-    $results = preg_match($regex, $text, $matches);
-    $count = $matches[1];
-    $search = $matches[2];
 }
-
-
-echo $search . '<br /><br />';
-echo $count . '<br /><br />';
-// print_r($matches);
-
 
 // fail if search string is empty
 if ($search == '') {
@@ -38,27 +33,38 @@ if ($search == '') {
     exit;
 }
 
-// Query Giphy - http://giphy.com/
+// Query Giphy, parse data
 $response = file_get_contents('http://api.giphy.com/v1/gifs/search?q=' .
             urlencode($search) . '&api_key=' . GIPHY_API_KEY . '&limit=' . $limit . '&offset=0');
 $response = json_decode($response);
-
-// Pick a random GIF
 $gifs  = $response->data;
 $count = count($gifs);
 
+// prepare response
+$response_data = array();
 // make sure we have an image
 if ($count) {
-    $image = $gifs[rand(0, $count - 1)]->images->original;
-    $response = $image->url;
+    // get random `$num` keys from response
+    $keys = array_rand($gifs, $num);
+    // array_rand returns the index if `$num` is an array
+    // else it returns an array if `$num` is greater than 1
+    if (is_array($keys)) {
+        // loop over the random keys, append image data to `$response_data`
+        for ($i=0; $i<=count($keys); $i++) {
+            $response_data[] = $gifs[$i]->images->original->url;
+        }
+    } else {
+        // just a single key
+        $response_data[] = $gifs[$keys]->images->original->url;
+    }
 } else {
-    $response = 'No image found for `' . $search . '`';
+    $response_data[] = 'No image found for `' . $search . '`';
 }
 
 // Respond
 header('Content-Type: application/json');
 echo json_encode(array(
-    'text' => $response
+    'text' => implode($response_data, ' ')
 ));
 
 ?>
