@@ -46,8 +46,8 @@ $response_data = array();
 if ($count) {
     // get random `$num` keys from response
     $keys = array_rand($gifs, $num);
-    // array_rand returns the index if `$num` is an array
-    // else it returns an array if `$num` is greater than 1
+    // array_rand returns the rancom index if `$num` is 1
+    // else it returns an array of indexes if `$num` is greater than 1
     if (is_array($keys)) {
         // loop over the random keys, append image data to `$response_data`
         for ($i=1; $i<=count($keys); $i++) {
