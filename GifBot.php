@@ -7,24 +7,24 @@ define('GIPHY_API_KEY', 'dc6zaTOxFJmzC');
 
 // maximum number to retrieve
 $limit = 25;
-// the number of images to return
-// can be overridden by gifbomb count
-$num = 1;
+
+// images to return when gifbombing
+$gifbomb_total = 5;
 
 // Get request
 $trigger = $_POST['trigger_word']; // currently gif or gifbomb
 $text = $_POST['text'];
 
+// extract search string
+$regex = '/^' . $trigger . ' (.+)$/';
+$results = preg_match($regex, $text, $matches);
+$search = $matches[1];
+
 // multiple images, or just a one-off?
 if ($trigger == 'gifbomb') {
-    $regex = '/^' . $trigger . ' (\d+) (.+)$/';
-    $results = preg_match($regex, $text, $matches);
-    $num = $matches[1];
-    $search = $matches[2];
+    $num = $gifbomb_total;
 } else {
-    $regex = '/^' . $trigger . ' (.+)$/';
-    $results = preg_match($regex, $text, $matches);
-    $search = $matches[1];
+    $num = 1;
 }
 
 // fail if search string is empty
