@@ -27,9 +27,9 @@ You may customize any of the settings to fit what you like best as long and the 
 
 ### GIF Bomb (optional)
 
-Add an outgoing webhook as above with the only difference being that the hook is #gifbomb in place of #gif
+Add an outgoing webhook as above with the only difference being that the hook is #bomb in place of #gif
 
-<img src="http://hellobold.com/gifbot/gifbot-setup2.jpg" />
+<img src="http://hellobold.com/gifbot/gifbot-setup2.jpg?new" />
 
 ## Usage
 

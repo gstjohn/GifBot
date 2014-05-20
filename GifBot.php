@@ -26,13 +26,13 @@ $count = count($gifs);
 // Build reponse
 $response = '';
 if ($count > 0) {
-    if ($trigger == '#gifbomb') {
+    if ($trigger == '#bomb') {
         shuffle($gifs);
 
         $pullCount = min($count, GIFBOMB_COUNT);
         while ($pullCount > 0) {
             $index = rand(0, $count - 1);
-            $response .= $gifs[$index]->getUrl() . ' ';
+            $response .= $gifs[$index]->getUrl();
 
             // Prevent duplicates
             unset($gifs[$index]);
