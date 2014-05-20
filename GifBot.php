@@ -1,6 +1,10 @@
 <?php
 
-define('GIFBOMB_COUNT', 5); // Number of GIFs to reply with during #gifbomb
+/**
+ * Number of GIFs to reply with during #gifbomb. Slack will only open
+ * up to 3 images automatically.
+ */
+define('GIFBOMB_COUNT', 3);
 
 // ----- END OF CONFIGURATION ----- //
 
@@ -32,7 +36,7 @@ if ($count > 0) {
         $pullCount = min($count, GIFBOMB_COUNT);
         while ($pullCount > 0) {
             $index = rand(0, $count - 1);
-            $response .= $gifs[$index]->getUrl();
+            $response .= $gifs[$index]->getUrl() . "\n";
 
             // Prevent duplicates
             unset($gifs[$index]);

@@ -47,7 +47,7 @@
 <h2>Gif Bomb</h2>
 
 <form action="GifBot.php" method="POST">
-	<input type="hidden" name="trigger_word" value="#gifbomb"/>
+	<input type="hidden" name="trigger_word" value="#bomb"/>
 	Search phrase: <input type="text" name="text" value="#bomb dance" placeholder="#bomb <search term>"/>
 	<input type="submit"/>
 </form>
@@ -70,7 +70,7 @@
 			$.post(url, { text: text, trigger_word: trigger_word })
 				.success(function (data) {
 					var result = '',
-						parts = data.text.split(' ');
+						parts = data.text.split("\n");
 
 					$.each(parts, function(key, value) {
 						if (value.indexOf('http') >= 0) {
