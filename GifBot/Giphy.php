@@ -27,7 +27,11 @@ class Giphy implements Gifable
 
         $images = array();
         foreach ($response->data as $image) {
-            $images[] = new Gif($image->images->original->url);
+            if ($image->images->original->width > $image->images->original->height) {
+                $images[] = new Gif($image->images->fixed_height->url);
+            } else {
+                $images[] = new Gif($image->images->fixed_width->url);
+            }
         }
 
         return $images;

@@ -25,10 +25,20 @@ $count = count($gifs);
 
 // Build reponse
 $response = '';
-if ($count) {
+if ($count > 0) {
     if ($trigger == '#gifbomb') {
-        for ($count = 0; $count < GIFBOMB_COUNT; $count++) {
-            $response .= $gifs[rand(0, $count - 1)]->getUrl() . ' ';
+        shuffle($gifs);
+
+        $pullCount = min($count, GIFBOMB_COUNT);
+        while ($pullCount > 0) {
+            $index = rand(0, $count - 1);
+            $response .= $gifs[$index]->getUrl() . ' ';
+
+            // Prevent duplicates
+            unset($gifs[$index]);
+            $gifs = array_values($gifs);
+
+            $pullCount--;
         }
     } else {
         $response = $gifs[rand(0, $count - 1)]->getUrl();

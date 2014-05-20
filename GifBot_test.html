@@ -1,65 +1,89 @@
 <html>
 <head>
-    <title>GifBot test page</title>
-    <style>
-        * { font-family: "Trebuchet MS", verdana, arial, sans-serif; }
-        input { font-size: 1.2em; }
-        #results {
-            border: 2px dashed #bbbbbb;
-            color: #bbbbbb;
-            min-height: 100px;
-            padding: 10px;
-        }
-    </style>
+	<title>GifBot test page</title>
+	<style>
+		* {
+			font-family: "Trebuchet MS", verdana, arial, sans-serif;
+		}
+
+		input {
+			font-size: 1.2em;
+		}
+
+		.results {
+			border: 2px dashed #bbbbbb;
+			color: #bbbbbb;
+			min-height: 100px;
+			padding: 10px;
+		}
+	</style>
 </head>
 <body>
 
-    <h1>GifBot test</h1>
+<h1>GifBot test</h1>
 
-    <p>
-        A simple test page for the Bold GifBot Slack plugin:<br />
-        <a href="https://github.com/bold/GifBot">https://github.com/bold/GifBot</a>
-    </p>
-    <p>
-        Upload this page to the same directory as GifBot.php. Test until it works.<br />
-        You might want to delete this page when you're done.
-    </p>
+<p>
+	A simple test page for the Bold GifBot Slack plugin:<br/>
+	<a href="https://github.com/bold/GifBot">https://github.com/bold/GifBot</a>
+</p>
 
-    <form action="GifBot.php" method="POST">
-        <input type="hidden" name="trigger_word" value="gif" />
-        Search phrase: <input type="text" name="text" placeholder="gif <search term>" />
-        <input type="submit" />
-    </form>
+<p>
+	Upload this page to the same directory as GifBot.php. Test until it works.<br/>
+	You might want to delete this page when you're done.
+</p>
 
-    <div id="results">
-        Results
-    </div>
+<h2>Gif</h2>
 
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script>
-        $(function(){
-            $('form').submit(function(e){
-                e.preventDefault();
+<form action="GifBot.php" method="POST">
+	<input type="hidden" name="trigger_word" value="#gif"/>
+	Search phrase: <input type="text" name="text" value="#gif dance" placeholder="#gif <search term>"/>
+	<input type="submit"/>
+</form>
 
-                var $form = $(this),
-                    text = $form.find('[name="text"]').val(),
-                    trigger_word = $form.find('[name="trigger_word"]').val(),
-                    url = $(this).attr('action');
+<div class="results">
+	Results
+</div>
 
-                $.post(url, { text: text, trigger_word: trigger_word })
-                    .success(function(data){
-                        var $resultContainer = $('#results'),
-                            result;
-                        if (data.text.indexOf('http') >= 0) {
-                            result = '<img src="' + data.text + '" />';
-                        } else {
-                            result = data.text;
-                        }
-                        $resultContainer.html(result);
-                    });
-            });
-        });
-    </script>
+<h2>Gif Bomb</h2>
+
+<form action="GifBot.php" method="POST">
+	<input type="hidden" name="trigger_word" value="#gifbomb"/>
+	Search phrase: <input type="text" name="text" value="#gifbomb dance" placeholder="#gifbomb <search term>"/>
+	<input type="submit"/>
+</form>
+
+<div class="results">
+	Results
+</div>
+
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script>
+	$(function () {
+		$('form').submit(function (e) {
+			e.preventDefault();
+
+			var $form = $(this),
+				text = $form.find('[name="text"]').val(),
+				trigger_word = $form.find('[name="trigger_word"]').val(),
+				url = $(this).attr('action');
+
+			$.post(url, { text: text, trigger_word: trigger_word })
+				.success(function (data) {
+					var result = '',
+						parts = data.text.split(' ');
+
+					$.each(parts, function(key, value) {
+						if (value.indexOf('http') >= 0) {
+							result += '<img src="' + value + '" /><br>';
+						} else {
+							result += value + ' ';
+						}
+					});
+					$form.next('.results').html(result);
+				});
+		});
+	});
+</script>
 
 </body>
 </html>
